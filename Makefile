@@ -7,7 +7,7 @@ OBJS_LIST := obj/getcodept.o obj/main.o
 
 EXEC := test
 
-all: $(EXEC)
+all: obj $(EXEC)
 
 .PHONY: clean
 
@@ -17,7 +17,7 @@ obj/getcodept.o: Makefile src/getcodept.c include/getcodept.h
 obj/main.o: Makefile src/main.c include/getcodept.h
 	gcc src/main.c -c -I$(BINC) -I$(BINC)/aplcore -Iinclude -o obj/main.o $(CFLAGS)
 
-$(EXEC): $(OBJS_LIST) obj
+$(EXEC): $(OBJS_LIST)
 	gcc $(OBJS_LIST) $(APLCORE_FLAGS) -o $(EXEC)
 
 obj:

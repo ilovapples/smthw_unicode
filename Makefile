@@ -11,13 +11,13 @@ all: $(EXEC)
 
 .PHONY: clean
 
-obj/getcodept.o: Makefile obj src/getcodept.c include/getcodept.h
+obj/getcodept.o: Makefile src/getcodept.c include/getcodept.h
 	gcc src/getcodept.c -c -I$(BINC) -I$(BINC)/aplcore -Iinclude -o obj/getcodept.o $(CFLAGS)
 
-obj/main.o: Makefile obj src/main.c include/getcodept.h
+obj/main.o: Makefile src/main.c include/getcodept.h
 	gcc src/main.c -c -I$(BINC) -I$(BINC)/aplcore -Iinclude -o obj/main.o $(CFLAGS)
 
-$(EXEC): Makefile $(OBJS_LIST)
+$(EXEC): $(OBJS_LIST) obj
 	gcc $(OBJS_LIST) $(APLCORE_FLAGS) -o $(EXEC)
 
 obj:

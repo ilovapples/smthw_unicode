@@ -2,7 +2,7 @@ BINC := $(HOME)/Coding/include
 BLIB := $(HOME)/Coding/lib
 
 APLCORE_FLAGS := -L$(BLIB) -laplcore
-CFLAGS := -Wall -Wextra -Wpedantic -g
+CFLAGS := -Wall -Wextra -Wpedantic -Wno-gnu-zero-variadic-macro-arguments -g
 OBJS_LIST := obj/getcodept.o obj/main.o
 
 EXEC := test

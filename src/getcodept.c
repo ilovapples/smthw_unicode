@@ -9,7 +9,8 @@
 struct UTF8_max4byte get_bytes_from_codepoint_str(const char *cp_str)
 {
 	const char *pos = cp_str;
-	if (strncmp(pos, "U+", 2) == 0)
+	const size_t cp_strlen = strlen(cp_str);
+	if (cp_strlen > 2 && strncmp(pos, "U+", 2) == 0)
 		pos += 2;
 	char buf[6+1] = {0};
 	char *bfps = buf;
@@ -68,4 +69,5 @@ struct UTF8_max4byte get_bytes_from_codepoint_str(const char *cp_str)
 		break;
 	}
 
+	return (struct UTF8_max4byte) {{0}, 0};
 }

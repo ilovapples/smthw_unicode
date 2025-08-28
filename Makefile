@@ -18,10 +18,10 @@ obj/main.o: Makefile obj src/main.c include/getcodept.h
 	gcc src/main.c -c -I$(BINC) -I$(BINC)/aplcore -Iinclude -o obj/main.o $(CFLAGS)
 
 $(EXEC): Makefile $(OBJS_LIST)
-	gcc $(APLCORE_FLAGS) $(OBJS_LIST) -o $(EXEC)
+	gcc $(OBJS_LIST) $(APLCORE_FLAGS) -o $(EXEC)
 
 obj:
 	mkdir obj
 
 clean:
-	rm obj/* $(EXEC)
+	rm -f obj/* $(EXEC)

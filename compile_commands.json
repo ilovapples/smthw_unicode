@@ -1,0 +1,32 @@
+[
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-I/Users/agrossman27/Coding/include",
+      "-I/Users/agrossman27/Coding/include/aplcore",
+      "-Iinclude",
+      "-o",
+      "obj/getcodept.o",
+      "src/getcodept.c"
+    ],
+    "directory": "/Users/agrossman27/Coding/c/smthw_unicode",
+    "file": "/Users/agrossman27/Coding/c/smthw_unicode/src/getcodept.c",
+    "output": "/Users/agrossman27/Coding/c/smthw_unicode/obj/getcodept.o"
+  },
+  {
+    "arguments": [
+      "/usr/bin/gcc",
+      "-c",
+      "-I/Users/agrossman27/Coding/include",
+      "-I/Users/agrossman27/Coding/include/aplcore",
+      "-Iinclude",
+      "-o",
+      "obj/main.o",
+      "src/main.c"
+    ],
+    "directory": "/Users/agrossman27/Coding/c/smthw_unicode",
+    "file": "/Users/agrossman27/Coding/c/smthw_unicode/src/main.c",
+    "output": "/Users/agrossman27/Coding/c/smthw_unicode/obj/main.o"
+  }
+]

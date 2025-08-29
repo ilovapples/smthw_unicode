@@ -6,7 +6,10 @@
 #include "aplcore/types.h"
 #include "getcodept.h"
 
-struct UTF8_max4byte get_bytes_from_codepoint_str(const char *cp_str)
+void get_bytes_from_codepoint_str(
+	const char *cp_str,
+	u8 *out_bytes,
+	usize *out_len)
 {
 	const char *pos = cp_str;
 	const size_t cp_strlen = strlen(cp_str);
@@ -17,13 +20,16 @@ struct UTF8_max4byte get_bytes_from_codepoint_str(const char *cp_str)
 	for (u8 i = 0; i < 6; ++i)
 	{
 		if (*pos && !isxdigit(*pos))
-			return (struct UTF8_max4byte) {{0}, 0};
+		{
+			*out_len = 0;
+			return;
+		}
 
 		if ((*bfps++ = *pos++) == '\0')
 			break;
 	}
 
-	struct UnicodeCodePoint code_point = {0};
+	UCP code_point = {0};
  	code_point.val.i = strtoul(buf, NULL, 16);
 	if (code_point.val.i < 0x0080)
 		code_point.type = UCP_ASCII_TYPE;
@@ -34,40 +40,41 @@ struct UTF8_max4byte get_bytes_from_codepoint_str(const char *cp_str)
 	else if (code_point.val.i < 0x110000)
 		code_point.type = UCP_3BYTE_TYPE;
 	else
-		return (struct UTF8_max4byte) {{0}, 0};
-
-	struct UTF8_max4byte ret = {0};
+	{
+		*out_len = 0;
+		return;
+	}
 
 	switch (code_point.type) {
 	case UCP_ASCII_TYPE:
-		ret.bytes[0] = code_point.val.b[0];
-		ret.len = 1;
-		return ret;
+		out_bytes[0] = code_point.val.b[0];
+		*out_len = 1;
+		return;
 	case UCP_2BYTE_TYPE:
-		ret.bytes[0] = 0xC0 | ((code_point.val.b[1] & 0x07) << 2)
+		out_bytes[0] = 0xC0 | ((code_point.val.b[1] & 0x07) << 2)
 		                    | ((code_point.val.b[0] & 0xC0) >> 6);
-		ret.bytes[1] = 0x80 | (code_point.val.b[0] & 0x3F);
-		ret.len = 2;
-		return ret;
+		out_bytes[1] = 0x80 | (code_point.val.b[0] & 0x3F);
+		*out_len = 2;
+		return;
 	case UCP_3BYTE_TYPE:
-		ret.bytes[0] = 0xE0 | ((code_point.val.b[1] & 0xF0) >> 4);
-		ret.bytes[1] = 0x80 | ((code_point.val.b[1] & 0x0F) << 2)
+		out_bytes[0] = 0xE0 | ((code_point.val.b[1] & 0xF0) >> 4);
+		out_bytes[1] = 0x80 | ((code_point.val.b[1] & 0x0F) << 2)
 		                    | ((code_point.val.b[0] & 0xC0) >> 6);
-		ret.bytes[2] = 0x80 | (code_point.val.b[0] & 0x3F);
-		ret.len = 3;
-		return ret;
+		out_bytes[2] = 0x80 | (code_point.val.b[0] & 0x3F);
+		*out_len = 3;
+		return;
 	case UCP_4BYTE_TYPE:
-		ret.bytes[0] = 0xF0 | ((code_point.val.b[2] & 0x1C) << 2);
-		ret.bytes[1] = 0x80 | ((code_point.val.b[2] & 0x03) << 4)
+		out_bytes[0] = 0xF0 | ((code_point.val.b[2] & 0x1C) << 2);
+		out_bytes[1] = 0x80 | ((code_point.val.b[2] & 0x03) << 4)
 		                    | ((code_point.val.b[1] & 0xF0) >> 4);
-		ret.bytes[2] = 0x80 | ((code_point.val.b[1] & 0x0F) << 2)
+		out_bytes[2] = 0x80 | ((code_point.val.b[1] & 0x0F) << 2)
 		                    | ((code_point.val.b[0] & 0xC0) >> 6);
-		ret.bytes[3] = 0x80 | (code_point.val.b[0] & 0x3F);
-		ret.len = 4;
-		return ret;
+		out_bytes[3] = 0x80 | (code_point.val.b[0] & 0x3F);
+		*out_len = 4;
+		return;
 	default:
 		break;
 	}
 
-	return (struct UTF8_max4byte) {{0}, 0};
+	*out_len = 0;
 }
